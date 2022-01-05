@@ -11,6 +11,7 @@ import RealityKit
 
 struct ContentView : View {
     @State private var isPlacementEnabled = false
+    @State private var isDetectionEnabled: Bool = true
     @State private var selectedModel: Model?
     @State private var modelConfirmedForPlacement: Model?
 
@@ -27,46 +28,60 @@ struct ContentView : View {
         return availableModels
     }()
     
+    
     var body: some View {
         ZStack(alignment: .bottom) {
-            ARViewControllerContainer(modelConfirmedForPlacement: $modelConfirmedForPlacement, models: $models)
+            ARViewControllerContainer(modelConfirmedForPlacement: $modelConfirmedForPlacement, models: $models, isDetectionEnabled: $isDetectionEnabled)
                 .edgesIgnoringSafeArea(.all)
-            VStack {
-                ModelConfidenceView(models: $models)
-                Spacer()
-                if self.isPlacementEnabled {
-                    PlacementButtonsView(isPlacementEnabled: $isPlacementEnabled, selectedModel: $selectedModel, modelConfirmedForPlacement: $modelConfirmedForPlacement)
-                } else {
-                    ModelPickerView(isPlacementEnabled: $isPlacementEnabled, selectedModel: $selectedModel, models: $models)
-                }
-            }
+            UserView(isPlacementEnabled: $isPlacementEnabled, selectedModel: $selectedModel, modelConfirmedForPlacement: $modelConfirmedForPlacement, isDetectionEnabled: $isDetectionEnabled, models: $models)
         }
     }
 }
 
 struct ARViewControllerContainer: UIViewControllerRepresentable {
-    @Binding var modelConfirmedForPlacement: Model?
-    @Binding var models: [Model]
+    let modelConfirmedForPlacement: Binding<Model?>
+    let models: Binding<[Model]>
+    let isDetectionEnabled: Binding<Bool>
+    
+    class Coordinator: ARViewControllerDelegate {
+        let modelConfirmedForPlacementBinding: Binding<Model?>
+        let modelsBinding: Binding<[Model]>
+        let isDetectionEnabledBinding: Binding<Bool>
+
+        init(modelConfirmedForPlacementBinding: Binding<Model?>, modelsBinding: Binding<[Model]>, isDetectionEnabledBinding: Binding<Bool>) {
+            self.modelConfirmedForPlacementBinding = modelConfirmedForPlacementBinding
+            self.modelsBinding = modelsBinding
+            self.isDetectionEnabledBinding = isDetectionEnabledBinding
+        }
+        
+        func classificationOccured(_ viewController: ARViewController, modelConfirmedForPlacement: Model?, models: [Model], isDetectionEnabled: Bool){
+            modelConfirmedForPlacementBinding.wrappedValue = modelConfirmedForPlacement
+            modelsBinding.wrappedValue = models
+            isDetectionEnabledBinding.wrappedValue = isDetectionEnabled
+        }
+    }
     
     func makeUIViewController(context: UIViewControllerRepresentableContext<ARViewControllerContainer>) -> ARViewController {
-        let viewController = ARViewController(modelConfirmedForPlacement: $modelConfirmedForPlacement, models: $models)
+        let viewController = ARViewController(modelConfirmedForPlacement: modelConfirmedForPlacement, models: models, isDetectionEnabled: isDetectionEnabled)
+        viewController.delegate = context.coordinator
         return viewController
     }
 
     func updateUIViewController(_ uiViewController: ARViewController, context: UIViewControllerRepresentableContext<ARViewControllerContainer>) {
-        if let model = modelConfirmedForPlacement{
+        if let model = modelConfirmedForPlacement.wrappedValue{
             uiViewController.handleConfirmButtonTap(model: model)
         }
     }
 
-    func makeCoordinator() -> ARViewControllerContainer.Coordinator {
-        return Coordinator()
+    func makeCoordinator() -> Coordinator {
+        return Coordinator(modelConfirmedForPlacementBinding: modelConfirmedForPlacement, modelsBinding: models, isDetectionEnabledBinding: isDetectionEnabled)
     }
 
-    class Coordinator {
-        
-    }
     
+}
+
+protocol ARViewControllerDelegate: AnyObject {
+    func classificationOccured(_ viewController: ARViewController, modelConfirmedForPlacement: Model?, models: [Model], isDetectionEnabled: Bool)
 }
 
 #if DEBUG

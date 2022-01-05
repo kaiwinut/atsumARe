@@ -57,7 +57,7 @@ class Model: Identifiable {
 extension Model {
     func updateConfidence(confidence: Double) {
         self.confidence = confidence
-        if self.confidence > 0.5 {
+        if self.confidence > 0.2 {
             self.enabled = true
             self.buttonBackgroundColor = Color.white
         } else {

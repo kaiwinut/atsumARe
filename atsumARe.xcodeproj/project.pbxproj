@@ -28,7 +28,8 @@
 		2AB199572784F7D0006E3831 /* cat.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 2AB1994E2784F7D0006E3831 /* cat.usdz */; };
 		2AB199592784FCAF006E3831 /* rabbit.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 2AB199582784FCAF006E3831 /* rabbit.usdz */; };
 		2AB1995B2784FF18006E3831 /* lion.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 2AB1995A2784FF18006E3831 /* lion.usdz */; };
-		2AB1995D27850F50006E3831 /* ModelConfidenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AB1995C27850F50006E3831 /* ModelConfidenceView.swift */; };
+		2AD7E3342785BC92005A332C /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AD7E3332785BC92005A332C /* UserView.swift */; };
+		2AD7E3362785D5CB005A332C /* ConfidenceCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AD7E3352785D5CB005A332C /* ConfidenceCardView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,7 +55,8 @@
 		2AB1994E2784F7D0006E3831 /* cat.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = cat.usdz; sourceTree = "<group>"; };
 		2AB199582784FCAF006E3831 /* rabbit.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = rabbit.usdz; sourceTree = "<group>"; };
 		2AB1995A2784FF18006E3831 /* lion.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = lion.usdz; sourceTree = "<group>"; };
-		2AB1995C27850F50006E3831 /* ModelConfidenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelConfidenceView.swift; sourceTree = "<group>"; };
+		2AD7E3332785BC92005A332C /* UserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
+		2AD7E3352785D5CB005A332C /* ConfidenceCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfidenceCardView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,10 +93,11 @@
 				2AB1993427849984006E3831 /* Info.plist */,
 				2AB1991F278498EC006E3831 /* AppDelegate.swift */,
 				2AB19921278498EC006E3831 /* ContentView.swift */,
+				2AD7E3332785BC92005A332C /* UserView.swift */,
 				2AB1992F27849920006E3831 /* ARViewController.swift */,
 				2AB199422784E0F8006E3831 /* PlacementButtonsView.swift */,
+				2AD7E3352785D5CB005A332C /* ConfidenceCardView.swift */,
 				2AB199442784E153006E3831 /* ModelPickerView.swift */,
-				2AB1995C27850F50006E3831 /* ModelConfidenceView.swift */,
 				2AB199402784D8F0006E3831 /* Model.swift */,
 				2AB19925278498ED006E3831 /* Assets.xcassets */,
 				2AB1993727849BC7006E3831 /* Models */,
@@ -220,11 +223,12 @@
 			files = (
 				2AB1993027849920006E3831 /* ARViewController.swift in Sources */,
 				2AB199432784E0F8006E3831 /* PlacementButtonsView.swift in Sources */,
-				2AB1995D27850F50006E3831 /* ModelConfidenceView.swift in Sources */,
 				2AB199452784E153006E3831 /* ModelPickerView.swift in Sources */,
 				2AB19922278498EC006E3831 /* ContentView.swift in Sources */,
 				2AB19920278498EC006E3831 /* AppDelegate.swift in Sources */,
 				2AB199412784D8F0006E3831 /* Model.swift in Sources */,
+				2AD7E3362785D5CB005A332C /* ConfidenceCardView.swift in Sources */,
+				2AD7E3342785BC92005A332C /* UserView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

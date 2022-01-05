@@ -14,19 +14,23 @@ import MultipeerSession
 
 class ARViewController: UIViewController {
     
+    weak var delegate: ARViewControllerDelegate?
+    private var arView: ARView!
+    
     @Binding var modelConfirmedForPlacement: Model?
     @Binding var models: [Model]
-    private var arView: ARView!
+    @Binding var isDetectionEnabled: Bool
     
     var multipeerSession: MultipeerSession?
     var sessionIDObservation: NSKeyValueObservation?
     
-    init(modelConfirmedForPlacement: Binding<Model?>, models: Binding<[Model]>) {
+    init(modelConfirmedForPlacement: Binding<Model?>, models: Binding<[Model]>, isDetectionEnabled: Binding<Bool>) {
         self._modelConfirmedForPlacement = modelConfirmedForPlacement
         self._models = models
+        self._isDetectionEnabled = isDetectionEnabled
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -107,7 +111,8 @@ class ARViewController: UIViewController {
             arView.scene.addAnchor(anchorEntity)
             
             DispatchQueue.main.async {
-                self.modelConfirmedForPlacement = nil
+                self.delegate?.classificationOccured(self, modelConfirmedForPlacement: nil, models: self.models, isDetectionEnabled: self.isDetectionEnabled)
+//                self.modelConfirmedForPlacement = nil
             }
         } else {
             print("[DEBUG]: unable to load model entity for \(model.modelName)")
@@ -142,6 +147,7 @@ class ARViewController: UIViewController {
                         print("[DEBUG] Updating confidence for \(self.models[index].modelName) - \(self.models[index].confidence)")
                     }
                 }
+                self.delegate?.classificationOccured(self, modelConfirmedForPlacement: self.modelConfirmedForPlacement, models: self.models, isDetectionEnabled: true)
             }
         }
     }
@@ -181,7 +187,10 @@ extension ARViewController: ARSessionDelegate {
     }
     
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
-        classifyFrame(ciImage: CIImage(cvPixelBuffer: frame.capturedImage))
+        if !self.isDetectionEnabled {
+            print("[DEBUG] Classifying frame")
+            classifyFrame(ciImage: CIImage(cvPixelBuffer: frame.capturedImage))
+        }
     }
 }
 
