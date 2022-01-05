@@ -9,18 +9,52 @@
 /* Begin PBXBuildFile section */
 		2AB19920278498EC006E3831 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AB1991F278498EC006E3831 /* AppDelegate.swift */; };
 		2AB19922278498EC006E3831 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AB19921278498EC006E3831 /* ContentView.swift */; };
-		2AB19924278498EC006E3831 /* Experience.rcproject in Sources */ = {isa = PBXBuildFile; fileRef = 2AB19923278498EC006E3831 /* Experience.rcproject */; };
 		2AB19926278498ED006E3831 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2AB19925278498ED006E3831 /* Assets.xcassets */; };
 		2AB19929278498ED006E3831 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2AB19928278498ED006E3831 /* Preview Assets.xcassets */; };
+		2AB1993027849920006E3831 /* ARViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AB1992F27849920006E3831 /* ARViewController.swift */; };
+		2AB1993327849933006E3831 /* MultipeerSession in Frameworks */ = {isa = PBXBuildFile; productRef = 2AB1993227849933006E3831 /* MultipeerSession */; };
+		2AB1993B27849BE6006E3831 /* toy_robot_vintage.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 2AB1993827849BE5006E3831 /* toy_robot_vintage.usdz */; };
+		2AB1993D27849BE6006E3831 /* toy_biplane.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 2AB1993A27849BE6006E3831 /* toy_biplane.usdz */; };
+		2AB199412784D8F0006E3831 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AB199402784D8F0006E3831 /* Model.swift */; };
+		2AB199432784E0F8006E3831 /* PlacementButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AB199422784E0F8006E3831 /* PlacementButtonsView.swift */; };
+		2AB199452784E153006E3831 /* ModelPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AB199442784E153006E3831 /* ModelPickerView.swift */; };
+		2AB1994F2784F7D0006E3831 /* goat.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 2AB199462784F7CE006E3831 /* goat.usdz */; };
+		2AB199502784F7D0006E3831 /* bear.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 2AB199472784F7CF006E3831 /* bear.usdz */; };
+		2AB199512784F7D0006E3831 /* wolf.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 2AB199482784F7CF006E3831 /* wolf.usdz */; };
+		2AB199522784F7D0006E3831 /* dog.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 2AB199492784F7CF006E3831 /* dog.usdz */; };
+		2AB199532784F7D0006E3831 /* owl.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 2AB1994A2784F7CF006E3831 /* owl.usdz */; };
+		2AB199542784F7D0006E3831 /* deer.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 2AB1994B2784F7CF006E3831 /* deer.usdz */; };
+		2AB199562784F7D0006E3831 /* peacock.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 2AB1994D2784F7D0006E3831 /* peacock.usdz */; };
+		2AB199572784F7D0006E3831 /* cat.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 2AB1994E2784F7D0006E3831 /* cat.usdz */; };
+		2AB199592784FCAF006E3831 /* rabbit.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 2AB199582784FCAF006E3831 /* rabbit.usdz */; };
+		2AB1995B2784FF18006E3831 /* lion.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 2AB1995A2784FF18006E3831 /* lion.usdz */; };
+		2AB1995D27850F50006E3831 /* ModelConfidenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AB1995C27850F50006E3831 /* ModelConfidenceView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		2AB1991C278498EC006E3831 /* atsumARe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = atsumARe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2AB1991F278498EC006E3831 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2AB19921278498EC006E3831 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		2AB19923278498EC006E3831 /* Experience.rcproject */ = {isa = PBXFileReference; lastKnownFileType = file.rcproject; path = Experience.rcproject; sourceTree = "<group>"; };
 		2AB19925278498ED006E3831 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2AB19928278498ED006E3831 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		2AB1992F27849920006E3831 /* ARViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewController.swift; sourceTree = "<group>"; };
+		2AB1993427849984006E3831 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		2AB1993827849BE5006E3831 /* toy_robot_vintage.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = toy_robot_vintage.usdz; sourceTree = "<group>"; };
+		2AB1993A27849BE6006E3831 /* toy_biplane.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = toy_biplane.usdz; sourceTree = "<group>"; };
+		2AB199402784D8F0006E3831 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		2AB199422784E0F8006E3831 /* PlacementButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacementButtonsView.swift; sourceTree = "<group>"; };
+		2AB199442784E153006E3831 /* ModelPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelPickerView.swift; sourceTree = "<group>"; };
+		2AB199462784F7CE006E3831 /* goat.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = goat.usdz; sourceTree = "<group>"; };
+		2AB199472784F7CF006E3831 /* bear.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = bear.usdz; sourceTree = "<group>"; };
+		2AB199482784F7CF006E3831 /* wolf.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = wolf.usdz; sourceTree = "<group>"; };
+		2AB199492784F7CF006E3831 /* dog.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = dog.usdz; sourceTree = "<group>"; };
+		2AB1994A2784F7CF006E3831 /* owl.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = owl.usdz; sourceTree = "<group>"; };
+		2AB1994B2784F7CF006E3831 /* deer.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = deer.usdz; sourceTree = "<group>"; };
+		2AB1994D2784F7D0006E3831 /* peacock.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = peacock.usdz; sourceTree = "<group>"; };
+		2AB1994E2784F7D0006E3831 /* cat.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = cat.usdz; sourceTree = "<group>"; };
+		2AB199582784FCAF006E3831 /* rabbit.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = rabbit.usdz; sourceTree = "<group>"; };
+		2AB1995A2784FF18006E3831 /* lion.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = lion.usdz; sourceTree = "<group>"; };
+		2AB1995C27850F50006E3831 /* ModelConfidenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelConfidenceView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -28,6 +62,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2AB1993327849933006E3831 /* MultipeerSession in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -53,10 +88,16 @@
 		2AB1991E278498EC006E3831 /* atsumARe */ = {
 			isa = PBXGroup;
 			children = (
+				2AB1993427849984006E3831 /* Info.plist */,
 				2AB1991F278498EC006E3831 /* AppDelegate.swift */,
 				2AB19921278498EC006E3831 /* ContentView.swift */,
-				2AB19923278498EC006E3831 /* Experience.rcproject */,
+				2AB1992F27849920006E3831 /* ARViewController.swift */,
+				2AB199422784E0F8006E3831 /* PlacementButtonsView.swift */,
+				2AB199442784E153006E3831 /* ModelPickerView.swift */,
+				2AB1995C27850F50006E3831 /* ModelConfidenceView.swift */,
+				2AB199402784D8F0006E3831 /* Model.swift */,
 				2AB19925278498ED006E3831 /* Assets.xcassets */,
+				2AB1993727849BC7006E3831 /* Models */,
 				2AB19927278498ED006E3831 /* Preview Content */,
 			);
 			path = atsumARe;
@@ -68,6 +109,25 @@
 				2AB19928278498ED006E3831 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		2AB1993727849BC7006E3831 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				2AB1995A2784FF18006E3831 /* lion.usdz */,
+				2AB199582784FCAF006E3831 /* rabbit.usdz */,
+				2AB199472784F7CF006E3831 /* bear.usdz */,
+				2AB1994E2784F7D0006E3831 /* cat.usdz */,
+				2AB1994B2784F7CF006E3831 /* deer.usdz */,
+				2AB199492784F7CF006E3831 /* dog.usdz */,
+				2AB199462784F7CE006E3831 /* goat.usdz */,
+				2AB1994A2784F7CF006E3831 /* owl.usdz */,
+				2AB1994D2784F7D0006E3831 /* peacock.usdz */,
+				2AB199482784F7CF006E3831 /* wolf.usdz */,
+				2AB1993A27849BE6006E3831 /* toy_biplane.usdz */,
+				2AB1993827849BE5006E3831 /* toy_robot_vintage.usdz */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -86,6 +146,9 @@
 			dependencies = (
 			);
 			name = atsumARe;
+			packageProductDependencies = (
+				2AB1993227849933006E3831 /* MultipeerSession */,
+			);
 			productName = atsumARe;
 			productReference = 2AB1991C278498EC006E3831 /* atsumARe.app */;
 			productType = "com.apple.product-type.application";
@@ -114,6 +177,9 @@
 				Base,
 			);
 			mainGroup = 2AB19913278498EC006E3831;
+			packageReferences = (
+				2AB1993127849933006E3831 /* XCRemoteSwiftPackageReference "multipeer-session" */,
+			);
 			productRefGroup = 2AB1991D278498EC006E3831 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -128,8 +194,20 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2AB1993D27849BE6006E3831 /* toy_biplane.usdz in Resources */,
+				2AB199542784F7D0006E3831 /* deer.usdz in Resources */,
+				2AB199592784FCAF006E3831 /* rabbit.usdz in Resources */,
+				2AB1994F2784F7D0006E3831 /* goat.usdz in Resources */,
+				2AB1993B27849BE6006E3831 /* toy_robot_vintage.usdz in Resources */,
+				2AB199532784F7D0006E3831 /* owl.usdz in Resources */,
+				2AB199522784F7D0006E3831 /* dog.usdz in Resources */,
+				2AB199512784F7D0006E3831 /* wolf.usdz in Resources */,
 				2AB19929278498ED006E3831 /* Preview Assets.xcassets in Resources */,
+				2AB199562784F7D0006E3831 /* peacock.usdz in Resources */,
 				2AB19926278498ED006E3831 /* Assets.xcassets in Resources */,
+				2AB199502784F7D0006E3831 /* bear.usdz in Resources */,
+				2AB199572784F7D0006E3831 /* cat.usdz in Resources */,
+				2AB1995B2784FF18006E3831 /* lion.usdz in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -140,9 +218,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2AB1993027849920006E3831 /* ARViewController.swift in Sources */,
+				2AB199432784E0F8006E3831 /* PlacementButtonsView.swift in Sources */,
+				2AB1995D27850F50006E3831 /* ModelConfidenceView.swift in Sources */,
+				2AB199452784E153006E3831 /* ModelPickerView.swift in Sources */,
 				2AB19922278498EC006E3831 /* ContentView.swift in Sources */,
 				2AB19920278498EC006E3831 /* AppDelegate.swift in Sources */,
-				2AB19924278498EC006E3831 /* Experience.rcproject in Sources */,
+				2AB199412784D8F0006E3831 /* Model.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -276,13 +358,16 @@
 				DEVELOPMENT_TEAM = SG82G2KB7R;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = atsumARe/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "This app will use local networking to discover nearby devices.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UIRequiredDeviceCapabilities = arkit;
 				INFOPLIST_KEY_UIStatusBarHidden = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -307,13 +392,16 @@
 				DEVELOPMENT_TEAM = SG82G2KB7R;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = atsumARe/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "This app will use local networking to discover nearby devices.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UIRequiredDeviceCapabilities = arkit;
 				INFOPLIST_KEY_UIStatusBarHidden = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -349,6 +437,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		2AB1993127849933006E3831 /* XCRemoteSwiftPackageReference "multipeer-session" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/AddedLayer/multipeer-session";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		2AB1993227849933006E3831 /* MultipeerSession */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2AB1993127849933006E3831 /* XCRemoteSwiftPackageReference "multipeer-session" */;
+			productName = MultipeerSession;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 2AB19914278498EC006E3831 /* Project object */;
 }
