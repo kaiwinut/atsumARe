@@ -16,7 +16,10 @@ class ARViewController: UIViewController {
     
     weak var delegate: ARViewControllerDelegate?
     private var arView: ARView!
-    
+    var viewWidth: CGFloat = 0.0
+    var viewHeight: CGFloat = 0.0
+    var indexFingerLocation: CGPoint?
+
     @Binding var modelConfirmedForPlacement: Model?
     @Binding var models: [Model]
     @Binding var isDetectionEnabled: Bool
@@ -51,6 +54,9 @@ class ARViewController: UIViewController {
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap(recognizer:)))
         arView.addGestureRecognizer(tapGestureRecognizer)
+        
+        viewWidth = arView.bounds.width
+        viewHeight = arView.bounds.height
     }
     
     func setupARView() {
@@ -88,7 +94,7 @@ class ARViewController: UIViewController {
     }
     
     func placeRedMark(named entityName: String, for anchor: ARAnchor) {
-        print("[DEBUG]: Connection is successful.")
+//        print("[DEBUG]: Connection is successful.")
         let mesh = MeshResource.generateSphere(radius: 0.005)
         let color = UIColor.red
         let material = SimpleMaterial(color: color, isMetallic: false)
@@ -119,9 +125,9 @@ class ARViewController: UIViewController {
         }
     }
     
-    func classifyFrame(ciImage: CIImage) {
+    func classifyFrame(frame: ARFrame) {
         let request = VNClassifyImageRequest()
-        let requestHandler = VNImageRequestHandler(ciImage: ciImage,
+        let requestHandler = VNImageRequestHandler(cvPixelBuffer: frame.capturedImage,
                                                    orientation: .up,
                                                    options: [:])
         DispatchQueue.global(qos: .userInitiated).async {
@@ -148,6 +154,43 @@ class ARViewController: UIViewController {
                     }
                 }
                 self.delegate?.classificationOccured(self, modelConfirmedForPlacement: self.modelConfirmedForPlacement, models: self.models, isDetectionEnabled: true)
+            }
+        }
+    }
+    
+    func detectHand(frame: ARFrame) {
+        let request = VNDetectHumanHandPoseRequest()
+        request.maximumHandCount = 1
+        request.revision = VNDetectHumanHandPoseRequestRevision1
+        
+        let handler = VNImageRequestHandler(cvPixelBuffer: frame.capturedImage, options: [:])
+        DispatchQueue.global(qos: .userInitiated).async {
+            do {
+                try handler.perform([request])
+            } catch {
+                assertionFailure("Human Pose Request Failed: \(error)")
+            }
+            guard let observation = request.results?.first else {
+                return
+            }
+            
+            if let indexFingerTip = try? observation.recognizedPoint(VNHumanHandPoseObservation.JointName.indexTip), indexFingerTip.confidence > 0.3 {
+                let normalizedLocation = indexFingerTip.location
+                self.indexFingerLocation = VNImagePointForNormalizedPoint(CGPoint(x: normalizedLocation.y, y: normalizedLocation.x), Int(self.viewWidth), Int(self.viewHeight))
+                print("[DEBUG]: Find Fingertip at (\(self.indexFingerLocation!.x), \(self.indexFingerLocation!.y))")
+            } else {
+                self.indexFingerLocation = nil
+            }
+            
+            if let location = self.indexFingerLocation {
+                if let entity = self.arView.entity(at: location) as? ModelEntity {
+                    print("[DEBUG]: Start entity animation")
+                    for animation in entity.availableAnimations {
+                        entity.playAnimation(animation.repeat())
+                    }
+                }
+            } else {
+                return
             }
         }
     }
@@ -189,8 +232,9 @@ extension ARViewController: ARSessionDelegate {
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
         if !self.isDetectionEnabled {
             print("[DEBUG] Classifying frame")
-            classifyFrame(ciImage: CIImage(cvPixelBuffer: frame.capturedImage))
+            classifyFrame(frame: frame)
         }
+//        detectHand(frame: frame)
     }
 }
 
