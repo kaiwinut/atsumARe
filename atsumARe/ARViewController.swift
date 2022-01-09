@@ -18,8 +18,12 @@ class ARViewController: UIViewController {
     private var arView: ARView!
     var viewWidth: CGFloat = 0.0
     var viewHeight: CGFloat = 0.0
+    var center: CGPoint?
     var indexFingerLocation: CGPoint?
+    var currentPlaneAnchor: ARPlaneAnchor?
 
+    var frameCount: Int = 0
+    
     @Binding var modelConfirmedForPlacement: Model?
     @Binding var models: [Model]
     @Binding var isDetectionEnabled: Bool
@@ -57,13 +61,14 @@ class ARViewController: UIViewController {
         
         viewWidth = arView.bounds.width
         viewHeight = arView.bounds.height
+        center = CGPoint(x: viewWidth/2, y: viewHeight/2)
     }
     
     func setupARView() {
         arView.automaticallyConfigureSession = false
         
         let config = ARWorldTrackingConfiguration()
-        config.planeDetection = [.horizontal, .vertical]
+        config.planeDetection = [.horizontal]
         config.environmentTexturing = .automatic
         config.isCollaborationEnabled = true
         
@@ -84,13 +89,69 @@ class ARViewController: UIViewController {
     }
     
     @objc func handleTap(recognizer: UITapGestureRecognizer) {
+        // show where the device is
         let anchor = ARAnchor(name: "RedMark", transform: arView!.cameraTransform.matrix)
         arView.session.add(anchor: anchor)
+        
+        // apply force to model entity
+        let tapLocation = recognizer.location(in: arView)
+        if let entity = arView?.entity(at: tapLocation) as? ModelEntity, entity.name != "" {
+            print("[DEBUG] hit: \(entity.name)")
+            if let centerAnchor = self.arView.raycast(from: tapLocation, allowing: .estimatedPlane, alignment: .any).first {
+                print("[DEBUG] New name tag")
+                let nameAnchor = ARAnchor(name: "\(entity.name)_tag", transform: centerAnchor.worldTransform)
+                arView.session.add(anchor: nameAnchor)
+                
+                let anchorEntity = AnchorEntity(anchor: nameAnchor)
+                let text = MeshResource.generateText(entity.name, extrusionDepth: 0.015, font: .systemFont(ofSize: 0.025, weight: .bold), containerFrame: CGRect.zero, alignment: .center, lineBreakMode: .byCharWrapping)
+                let color = UIColor.red
+                let material = SimpleMaterial(color: color, isMetallic: false)
+                let textEntity = ModelEntity(mesh: text, materials: [material])
+                textEntity.position = [-0.1, 0.2, 0.0]
+                anchorEntity.addChild(textEntity)
+                arView.scene.addAnchor(anchorEntity)
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                    self.arView.scene.removeAnchor(anchorEntity)
+                }
+            }
+        }
+        // show where the model will be placed
+       else if let centerAnchor = self.arView.raycast(from: center!, allowing: .estimatedPlane, alignment: .any).first {
+           print("[DEBUG] New plane anchor")
+           let planeAnchor = ARAnchor(name: "box", transform: centerAnchor.worldTransform)
+           arView.session.add(anchor: planeAnchor)
+           
+           let anchorEntity = AnchorEntity(anchor: planeAnchor)
+           let plane = ModelEntity(mesh: .generatePlane(width: 2, depth: 2), materials: [OcclusionMaterial()])
+           anchorEntity.addChild(plane)
+           plane.generateCollisionShapes(recursive: false)
+           plane.physicsBody = PhysicsBodyComponent(massProperties: .default, material: .default, mode: .static)
+           
+           let mesh = MeshResource.generateBox(size: 0.01)
+           let color = UIColor.blue
+           let material = SimpleMaterial(color: color, isMetallic: false)
+           let box = ModelEntity(mesh: mesh, materials: [material])
+           box.position = [0,0.1,0]
+           box.generateCollisionShapes(recursive: false)
+           box.physicsBody = PhysicsBodyComponent(massProperties: .default, material: .default, mode: .dynamic)
+           anchorEntity.addChild(box)
+           arView.scene.addAnchor(anchorEntity)
+           
+           DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+               self.arView.scene.removeAnchor(anchorEntity)
+           }
+       }
+//            let planeAnchor = ARAnchor(name: "box", transform: anchor.transform)
+//            arView.session.add(anchor: planeAnchor)
     }
     
     func handleConfirmButtonTap(model: Model) {
-        let anchor = ARAnchor(name: model.modelName, transform: arView!.cameraTransform.matrix)
-        arView.session.add(anchor: anchor)
+        let centerPoint = self.arView.raycast(from: center!, allowing: .estimatedPlane, alignment: .any)
+        if let centerAnchor = centerPoint.first {
+            let planeAnchor = ARAnchor(name: model.modelName, transform: centerAnchor.worldTransform)
+            arView.session.add(anchor: planeAnchor)
+        }
     }
     
     func placeRedMark(named entityName: String, for anchor: ARAnchor) {
@@ -112,13 +173,26 @@ class ARViewController: UIViewController {
         if let modelEntity = model.modelEntity {
             print("[DEBUG]: adding model to scene - \(model.modelName)")
             let anchorEntity = AnchorEntity(anchor: anchor)
-            anchorEntity.move(to: Transform(pitch: .pi/2, yaw: 0, roll: 0), relativeTo: anchorEntity)
+            
+            // Add plane to prevent falling
+            let plane = ModelEntity(mesh: .generatePlane(width: 1, depth: 1), materials: [OcclusionMaterial()])
+            anchorEntity.addChild(plane)
+            plane.generateCollisionShapes(recursive: false)
+            plane.physicsBody = PhysicsBodyComponent(massProperties: .default, material: .default, mode: .static)
+            
+            modelEntity.generateCollisionShapes(recursive: false)
+            modelEntity.physicsBody = PhysicsBodyComponent(massProperties: .default, material: .default, mode: .dynamic)
+            modelEntity.name = model.modelName
+            
+            if (model.modelName != "toy_biplane" && model.modelName != "toy_robot_vintage") {
+                modelEntity.scale = [0.05, 0.05, 0.05]
+            }
+            
             anchorEntity.addChild(modelEntity.clone(recursive: true))
             arView.scene.addAnchor(anchorEntity)
             
             DispatchQueue.main.async {
                 self.delegate?.classificationOccured(self, modelConfirmedForPlacement: nil, models: self.models, isDetectionEnabled: self.isDetectionEnabled)
-//                self.modelConfirmedForPlacement = nil
             }
         } else {
             print("[DEBUG]: unable to load model entity for \(model.modelName)")
@@ -164,7 +238,7 @@ class ARViewController: UIViewController {
         request.revision = VNDetectHumanHandPoseRequestRevision1
         
         let handler = VNImageRequestHandler(cvPixelBuffer: frame.capturedImage, options: [:])
-        DispatchQueue.global(qos: .userInitiated).async {
+        if self.frameCount % 20 == 0 {
             do {
                 try handler.perform([request])
             } catch {
@@ -173,21 +247,19 @@ class ARViewController: UIViewController {
             guard let observation = request.results?.first else {
                 return
             }
-            
             if let indexFingerTip = try? observation.recognizedPoint(VNHumanHandPoseObservation.JointName.indexTip), indexFingerTip.confidence > 0.3 {
                 let normalizedLocation = indexFingerTip.location
                 self.indexFingerLocation = VNImagePointForNormalizedPoint(CGPoint(x: normalizedLocation.y, y: normalizedLocation.x), Int(self.viewWidth), Int(self.viewHeight))
-                print("[DEBUG]: Find Fingertip at (\(self.indexFingerLocation!.x), \(self.indexFingerLocation!.y))")
             } else {
                 self.indexFingerLocation = nil
             }
             
             if let location = self.indexFingerLocation {
+                print("[DEBUG]: Find Fingertip at (\(self.indexFingerLocation!.x), \(self.indexFingerLocation!.y))")
                 if let entity = self.arView.entity(at: location) as? ModelEntity {
-                    print("[DEBUG]: Start entity animation")
-                    for animation in entity.availableAnimations {
-                        entity.playAnimation(animation.repeat())
-                    }
+                    print("[DEBUG] hit: \(entity.name)")
+                    entity.addForce([0, 0.025, 0], relativeTo: nil)
+                    entity.addTorque([0, 0.025, 0], relativeTo: nil)
                 }
             } else {
                 return
@@ -214,6 +286,11 @@ extension ARViewController: ARSessionDelegate {
                 }
             }
             
+            if let planeAnchor = anchor as? ARPlaneAnchor {
+                print("[DEBUG]: Found new plane anchor.")
+                currentPlaneAnchor = planeAnchor
+            }
+            
             if let participantAnchor = anchor as? ARParticipantAnchor {
                 print("[DEBUG]: Successfully conenected with another user.")
                 // For some reason not working...
@@ -230,11 +307,12 @@ extension ARViewController: ARSessionDelegate {
     }
     
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
+        frameCount += 1
         if !self.isDetectionEnabled {
             print("[DEBUG] Classifying frame")
             classifyFrame(frame: frame)
         }
-//        detectHand(frame: frame)
+        detectHand(frame: frame)
     }
 }
 
