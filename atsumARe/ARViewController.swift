@@ -20,7 +20,6 @@ class ARViewController: UIViewController {
     var viewHeight: CGFloat = 0.0
     var center: CGPoint?
     var indexFingerLocation: CGPoint?
-    var currentPlaneAnchor: ARPlaneAnchor?
 
     var frameCount: Int = 0
     
@@ -89,61 +88,26 @@ class ARViewController: UIViewController {
     }
     
     @objc func handleTap(recognizer: UITapGestureRecognizer) {
-        // show where the device is
-        let anchor = ARAnchor(name: "RedMark", transform: arView!.cameraTransform.matrix)
-        arView.session.add(anchor: anchor)
+        // add red mark anchor to session at device position
+        let participantAnchor = ARAnchor(name: "RedMark", transform: arView!.cameraTransform.matrix)
+        arView.session.add(anchor: participantAnchor)
         
-        // apply force to model entity
+        // add name tag anchor to session at tapped location
         let tapLocation = recognizer.location(in: arView)
         if let entity = arView?.entity(at: tapLocation) as? ModelEntity, entity.name != "" {
-            print("[DEBUG] hit: \(entity.name)")
+//            print("[DEBUG] hit: \(entity.name)")
             if let centerAnchor = self.arView.raycast(from: tapLocation, allowing: .estimatedPlane, alignment: .any).first {
-                print("[DEBUG] New name tag")
+//                print("[DEBUG] New name tag")
                 let nameAnchor = ARAnchor(name: "\(entity.name)_tag", transform: centerAnchor.worldTransform)
                 arView.session.add(anchor: nameAnchor)
-                
-                let anchorEntity = AnchorEntity(anchor: nameAnchor)
-                let text = MeshResource.generateText(entity.name, extrusionDepth: 0.015, font: .systemFont(ofSize: 0.025, weight: .bold), containerFrame: CGRect.zero, alignment: .center, lineBreakMode: .byCharWrapping)
-                let color = UIColor.red
-                let material = SimpleMaterial(color: color, isMetallic: false)
-                let textEntity = ModelEntity(mesh: text, materials: [material])
-                textEntity.position = [-0.1, 0.2, 0.0]
-                anchorEntity.addChild(textEntity)
-                arView.scene.addAnchor(anchorEntity)
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                    self.arView.scene.removeAnchor(anchorEntity)
-                }
             }
         }
-        // show where the model will be placed
+        // add box anchor to session at device center
        else if let centerAnchor = self.arView.raycast(from: center!, allowing: .estimatedPlane, alignment: .any).first {
-           print("[DEBUG] New plane anchor")
+//           print("[DEBUG] New plane anchor")
            let planeAnchor = ARAnchor(name: "box", transform: centerAnchor.worldTransform)
            arView.session.add(anchor: planeAnchor)
-           
-           let anchorEntity = AnchorEntity(anchor: planeAnchor)
-           let plane = ModelEntity(mesh: .generatePlane(width: 2, depth: 2), materials: [OcclusionMaterial()])
-           anchorEntity.addChild(plane)
-           plane.generateCollisionShapes(recursive: false)
-           plane.physicsBody = PhysicsBodyComponent(massProperties: .default, material: .default, mode: .static)
-           
-           let mesh = MeshResource.generateBox(size: 0.01)
-           let color = UIColor.blue
-           let material = SimpleMaterial(color: color, isMetallic: false)
-           let box = ModelEntity(mesh: mesh, materials: [material])
-           box.position = [0,0.1,0]
-           box.generateCollisionShapes(recursive: false)
-           box.physicsBody = PhysicsBodyComponent(massProperties: .default, material: .default, mode: .dynamic)
-           anchorEntity.addChild(box)
-           arView.scene.addAnchor(anchorEntity)
-           
-           DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-               self.arView.scene.removeAnchor(anchorEntity)
-           }
        }
-//            let planeAnchor = ARAnchor(name: "box", transform: anchor.transform)
-//            arView.session.add(anchor: planeAnchor)
     }
     
     func handleConfirmButtonTap(model: Model) {
@@ -154,8 +118,7 @@ class ARViewController: UIViewController {
         }
     }
     
-    func placeRedMark(named entityName: String, for anchor: ARAnchor) {
-//        print("[DEBUG]: Connection is successful.")
+    func placeRedMark(for anchor: ARAnchor) {
         let mesh = MeshResource.generateSphere(radius: 0.005)
         let color = UIColor.red
         let material = SimpleMaterial(color: color, isMetallic: false)
@@ -165,6 +128,43 @@ class ARViewController: UIViewController {
         arView.scene.addAnchor(anchorEntity)
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            self.arView.scene.removeAnchor(anchorEntity)
+        }
+    }
+    
+    func placeBox(for anchor: ARAnchor) {
+        let anchorEntity = AnchorEntity(anchor: anchor)
+        let plane = ModelEntity(mesh: .generatePlane(width: 2, depth: 2), materials: [OcclusionMaterial()])
+        anchorEntity.addChild(plane)
+        plane.generateCollisionShapes(recursive: false)
+        plane.physicsBody = PhysicsBodyComponent(massProperties: .default, material: .default, mode: .static)
+        
+        let mesh = MeshResource.generateBox(size: 0.01)
+        let color = UIColor.blue
+        let material = SimpleMaterial(color: color, isMetallic: false)
+        let box = ModelEntity(mesh: mesh, materials: [material])
+        box.position = [0,0.1,0]
+        box.generateCollisionShapes(recursive: false)
+        box.physicsBody = PhysicsBodyComponent(massProperties: .default, material: .default, mode: .dynamic)
+        anchorEntity.addChild(box)
+        arView.scene.addAnchor(anchorEntity)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            self.arView.scene.removeAnchor(anchorEntity)
+        }
+    }
+    
+    func placeNameTag(model: Model, for anchor: ARAnchor) {
+        let anchorEntity = AnchorEntity(anchor: anchor)
+        let text = MeshResource.generateText(model.modelName, extrusionDepth: 0.015, font: .systemFont(ofSize: 0.025, weight: .bold), containerFrame: CGRect.zero, alignment: .center, lineBreakMode: .byCharWrapping)
+        let color = UIColor.red
+        let material = SimpleMaterial(color: color, isMetallic: false)
+        let textEntity = ModelEntity(mesh: text, materials: [material])
+        textEntity.position = [-0.1, 0.2, 0.0]
+        anchorEntity.addChild(textEntity)
+        arView.scene.addAnchor(anchorEntity)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
             self.arView.scene.removeAnchor(anchorEntity)
         }
     }
@@ -274,11 +274,18 @@ extension ARViewController: ARSessionDelegate {
     func session(_ session: ARSession, didAdd anchors: [ARAnchor]) {
         for anchor in anchors {
             if let anchorName = anchor.name, anchorName == "RedMark" {
-                placeRedMark(named: anchorName, for: anchor)
+                placeRedMark(for: anchor)
+            }
+            else if let anchorName = anchor.name, anchorName == "box" {
+                placeBox(for: anchor)
             }
             
             else if let anchorName = anchor.name {
                 for model in self.models {
+                    if anchorName == model.modelName + "_tag" {
+                        placeNameTag(model: model, for: anchor)
+                        break
+                    }
                     if model.modelName == anchorName {
                         placeConfirmedObject(model: model, for: anchor)
                         break
@@ -286,22 +293,12 @@ extension ARViewController: ARSessionDelegate {
                 }
             }
             
-            if let planeAnchor = anchor as? ARPlaneAnchor {
+            else if anchor is ARPlaneAnchor {
                 print("[DEBUG]: Found new plane anchor.")
-                currentPlaneAnchor = planeAnchor
             }
             
-            if let participantAnchor = anchor as? ARParticipantAnchor {
+            else if anchor is ARParticipantAnchor {
                 print("[DEBUG]: Successfully conenected with another user.")
-                // For some reason not working...
-                let anchorEntity = AnchorEntity(anchor: participantAnchor)
-                let mesh = MeshResource.generateSphere(radius: 0.01)
-                let color = UIColor.red
-                let material = SimpleMaterial(color: color, isMetallic: false)
-                let colorSphere = ModelEntity(mesh: mesh, materials: [material])
-
-                anchorEntity.addChild(colorSphere)
-                arView.scene.addAnchor(anchorEntity)
             }
         }
     }
